@@ -1,8 +1,10 @@
 DEPENDENCIAS
-pip install SQLAlchemy
 pip install django-multiselectfield
-pip install pandas
+pip install SQLAlchemy
+pip install mysqlclient
 pip install mysql-connector-python
+pip install pandas
+pip install xlrd
 
 
 DJANGO MULTIPLE CHOICES 

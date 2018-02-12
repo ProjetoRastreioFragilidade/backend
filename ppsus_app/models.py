@@ -32,18 +32,6 @@ MULTIPLE_CHOICES = (
 	('8', 'Tomar remédios')
 )
 
-class Posto(models.Model):
-	nome = models.CharField(max_length=100)
-	end_bairro = models.CharField(max_length=100, null=True)
-	end_rua = models.CharField(max_length=100, null=True)
-	end_numero = models.IntegerField(null=True)
-	cep = models.CharField(max_length=8, null=True)
-	telefone = models.CharField(max_length=11, null=True)
-
-class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, null=True, related_name='user')
-
 # a user model was just created! This now creates your extended user (a profile):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
@@ -55,6 +43,18 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
 	instance.profile.save()
+
+class Posto(models.Model):
+	nome = models.CharField(max_length=100)
+	end_bairro = models.CharField(max_length=100, null=True)
+	end_rua = models.CharField(max_length=100, null=True)
+	end_numero = models.IntegerField(null=True)
+	cep = models.CharField(max_length=8, null=True)
+	telefone = models.CharField(max_length=11, null=True)
+
+class Profile(models.Model):
+	user = models.OneToOneField(User, on_delete=models.CASCADE)
+	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, null=True, related_name='user')
 
 class Paciente(models.Model):
 	nome = models.CharField(max_length=100)
@@ -71,36 +71,18 @@ class Subjetiva(models.Model):
 	usuario_edit = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='subjetiva_edit')
 
 	data_inicio = models.DateTimeField(auto_now_add=True)
-	data_fim = models.DateTimeField() #acho q não daria certo colocar auto_now=True em virtude de erro de conexão qdo tentar salvar
+	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True)
 	fatores = models.CharField(max_length=300, null=True)
 
-	q1_perdeu_peso = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_4,
-	)
+	q1_perdeu_peso = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
 	q1_perdeu_peso_kg = models.FloatField(null=True)
-	q2_ativ_fisica = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_4,
-	)
-	q3_red_forca = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_4,
-	)
-	q4_red_caminhada = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_4,
-	)
-	q5_fadiga = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_FREQ,
-	)
-	q6_desanimo = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_FREQ,
-	)
+	q2_ativ_fisica = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
+	q3_red_forca = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
+	q4_red_caminhada = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
+	q5_fadiga = models.PositiveSmallIntegerField(choices=CHOICES_FREQ)
+	q6_desanimo = models.PositiveSmallIntegerField(choices=CHOICES_FREQ)
 
 class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')
@@ -108,66 +90,43 @@ class Edmonton(models.Model):
 	usuario_edit = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='edmonton_edit')
 	
 	data_inicio = models.DateTimeField(auto_now_add=True)
-	data_fim = models.DateTimeField() #acho q não daria certo colocar auto_now=True em virtude de erro de conexão qdo tentar salvar
+	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True)
 	fatores = models.CharField(max_length=300, null=True)
 
 	q1_cognicao = models.PositiveSmallIntegerField(
-		null=True,
 		choices=((1, 'Aprovado'),
 				 (2, 'Reprovado com erros mínimos'),
 				 (3, 'Reprovado com erros significantes'),)
 	)
-	q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/', null=True)
+	q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/')
 	q2_estado_saude_A = models.PositiveSmallIntegerField(
-		null=True,
 		choices=((1, '0'),
 				 (2, '1 ou 2'),
 				 (3, '3 ou +'),)
 	)
 	q2_estado_saude_B = models.PositiveSmallIntegerField(
-		null=True,
 		choices=((1, 'Excelente'),
 				 (2, 'Muito boa'),
 				 (3, 'Boa'),
 				 (4, 'Razoável'),
 				 (5, 'Ruim'),)
 	)
-	q3_ind_func = MultiSelectField(
-		null=True,
-		choices=MULTIPLE_CHOICES,
-	)
+	q3_ind_func = MultiSelectField(choices=MULTIPLE_CHOICES)
 	q4_sup_social = models.PositiveSmallIntegerField(
-		null=True,
 		choices=((1, 'Sempre'),
 				 (2, 'As vezes'),
 				 (3, 'Nunca'),)
 	)
-	q5_medicamento_A = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_2,
-	)
-	q5_medicamento_B = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_2,
-	)
-	q6_nutricao = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_2,
-	)
-	q7_humor = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_2,
-	)
-	q8_continencia = models.PositiveSmallIntegerField(
-		null=True,
-		choices=CHOICES_SIM_NAO_2,
-	)
+	q5_medicamento_A = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_2)
+	q5_medicamento_B = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_2)
+	q6_nutricao = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_2)
+	q7_humor = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_2)
+	q8_continencia = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_2)
 	q9_desemp_func = models.PositiveSmallIntegerField(
-		null=True,
 		choices=((1, '0-10 segundos'),
 				 (2, '11-20 segundos'),
 				 (3, '21 segundos ou mais'),)
 	)
-	q9_desemp_func_tempo = models.TimeField(null=True)
+	q9_desemp_func_tempo = models.TimeField()
