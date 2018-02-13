@@ -40,27 +40,16 @@ class EdmontonSerializer(serializers.ModelSerializer):
 #        model = User
 #        fields = '__all__'
 class UserSerializer(serializers.ModelSerializer):
-
-    #posto = serializers.PrimaryKeyRelatedField(many=True, queryset='profile')
-
     class Meta:
         model = User
         fields = '__all__'
-'''
-    def update(self, instance, validated_data):
-        instance.username = validated_data.get('username', instance.username)
-        instance.password = validated_data.get('password', instance.password)
-        instance.first_name = validated_data.get('first_name', instance.first_name)
-        instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.email = validated_data.get('email', instance.email)
-        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
-        instance.is_active = validated_data.get('is_active', instance.is_active)
-        instance.profile.posto = validated_data.get('profile.posto', instance.profile.posto)
-        instance.save()
-        return instance
 
-    def create(self, validated_data):
-        return User.objects.create(**validated_data)'''
+    '''def create(self, validated_data):
+        user = self.Meta.model(**validated_data)
+        user.set_password(validated_data["password"])
+        #user.save()
+        return user'''
+    
 
 class AvaliacaoSerializer(serializers.Serializer):
 	id = serializers.IntegerField(read_only=True)

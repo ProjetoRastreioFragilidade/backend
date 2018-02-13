@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 from ppsus_app import views
+from rest_framework.authtoken.views import obtain_auth_token
 
 
 # Create a router and register our viewsets with it.
@@ -18,4 +19,5 @@ urlpatterns = [
 	url(r'^', include(router.urls)),
 	url(r'^avaliacoes/(?P<id_paciente>[0-9]+)/$', views.AvaliacaoView.as_view()),
 	url(r'^busca/(?P<n_sus>[0-9]+)/$', views.GetPacienteView.as_view()),
+	url(r'^get-token/', obtain_auth_token),
 ]

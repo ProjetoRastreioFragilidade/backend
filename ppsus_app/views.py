@@ -17,26 +17,14 @@ from ppsus_app.src import functions
 
 
 class PostoViewSet(viewsets.ModelViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        permissions.DjangoModelPermissions)
-
     queryset = Posto.objects.all()
     serializer_class = PostoSerializer
 
 class PacienteViewSet(viewsets.ModelViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        permissions.DjangoModelPermissions)
-
     queryset = Paciente.objects.all()
     serializer_class = PacienteSerializer
 
 class SubjetivaViewSet(viewsets.ModelViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        permissions.DjangoModelPermissions)
-    
     queryset = Subjetiva.objects.all()
     serializer_class = SubjetivaSerializer
     
@@ -60,10 +48,6 @@ class SubjetivaViewSet(viewsets.ModelViewSet):
             fatores=fatores)
 
 class EdmontonViewSet(viewsets.ModelViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        permissions.DjangoModelPermissions)
-
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     
     queryset = Edmonton.objects.all()
@@ -89,17 +73,16 @@ class EdmontonViewSet(viewsets.ModelViewSet):
 
 #class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
-    permission_classes = (
-        permissions.IsAuthenticated,
-        permissions.DjangoModelPermissions)
-
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def perform_create(self, serializer):
+        instance = serializer.save()
+        instance.set_password(instance.password)
+        instance.save()
+
 
 class AvaliacaoView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
     def get(self, request, id_paciente, format=None):
         from itertools import chain
 
@@ -117,8 +100,6 @@ class AvaliacaoView(APIView):
         return Response(serializer.data)
 
 class GetPacienteView(APIView):
-    permission_classes = (permissions.IsAuthenticated,)
-
     def get_object(self, n_sus):
         try:
             return Paciente.objects.get(nro_sus=n_sus)
