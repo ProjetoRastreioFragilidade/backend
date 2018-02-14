@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from multiselectfield import MultiSelectField
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -34,23 +33,6 @@ MULTIPLE_CHOICES = (
 	('8', 'Tomar remédios')
 )
 
-# a user model was just created! This now creates your extended user (a profile):
-@receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
-	if created:
-		# instance is the user model being saved.
-		Profile.objects.create(user=instance)
-
-# a user model was just saved! This now saves your extended user (a profile):
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-	instance.profile.save()
-
-# This receiver handles token creation immediately a new user is created.
-@receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
 
 class Posto(models.Model):
 	nome = models.CharField(max_length=100)
@@ -60,9 +42,8 @@ class Posto(models.Model):
 	cep = models.CharField(max_length=8, null=True)
 	telefone = models.CharField(max_length=11, null=True)
 
-class Profile(models.Model):
-	user = models.OneToOneField(User, on_delete=models.CASCADE)
-	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, null=True, related_name='user')
+class User(AbstractUser):
+	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='user', null=True)
 
 class Paciente(models.Model):
 	nome = models.CharField(max_length=100)
@@ -75,8 +56,8 @@ class Paciente(models.Model):
 
 class Subjetiva(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='subjetiva')
-	usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='subjetiva')
-	usuario_edit = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='subjetiva_edit')
+	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='subjetiva')
+	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, related_name='subjetiva_edit')
 
 	data_inicio = models.DateTimeField(auto_now_add=True)
 	data_fim = models.DateTimeField(auto_now=True)
@@ -94,8 +75,8 @@ class Subjetiva(models.Model):
 
 class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')
-	usuario = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='edmonton')
-	usuario_edit = models.ForeignKey('auth.User', on_delete=models.CASCADE, null=True, related_name='edmonton_edit')
+	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='edmonton')
+	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, related_name='edmonton_edit')
 	
 	data_inicio = models.DateTimeField(auto_now_add=True)
 	data_fim = models.DateTimeField(auto_now=True)
@@ -138,3 +119,11 @@ class Edmonton(models.Model):
 				 (3, '21 segundos ou mais'),)
 	)
 	q9_desemp_func_tempo = models.TimeField()
+
+
+
+# This receiver handles token creation immediately a new user is created.
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

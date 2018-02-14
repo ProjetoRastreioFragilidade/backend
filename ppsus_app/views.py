@@ -2,7 +2,6 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from ppsus_app.models import *
 from django.db.models import Value
-from django.contrib.auth.models import User
 from ppsus_app.serializers import *
 from django.db.models.fields import CharField
 
@@ -77,6 +76,11 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
     def perform_create(self, serializer):
+        instance = serializer.save(is_active=True, is_staff=True)
+        instance.set_password(instance.password)
+        instance.save()
+
+    def perform_update(self, serializer):
         instance = serializer.save()
         instance.set_password(instance.password)
         instance.save()

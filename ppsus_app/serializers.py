@@ -1,7 +1,7 @@
 from rest_framework import fields, serializers
 from .models import *
-from django.contrib.auth.models import User
 from ppsus_app.models import MULTIPLE_CHOICES
+from django.contrib.auth.hashers import make_password
 
 class PostoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,43 +13,26 @@ class PacienteSerializer(serializers.ModelSerializer):
         model = Paciente
         fields = '__all__'
 
-class SubjetivaSerializer(serializers.ModelSerializer):
-    usuario = serializers.ReadOnlyField(source='')
-    usuario_edit = serializers.ReadOnlyField(source='')
-    fragilidade = serializers.ReadOnlyField(source='')
-    fatores = serializers.ReadOnlyField(source='')
-    
+class SubjetivaSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Subjetiva
         fields = '__all__'
+        read_only_fields = ('usuario', 'usuario_edit', 'fragilidade', 'fatores')
 
 class EdmontonSerializer(serializers.ModelSerializer):
-    usuario = serializers.ReadOnlyField(source='')
-    usuario_edit = serializers.ReadOnlyField(source='')
-    fragilidade = serializers.ReadOnlyField(source='')
-    fatores = serializers.ReadOnlyField(source='')
-    
     q3_ind_func = fields.MultipleChoiceField(choices=MULTIPLE_CHOICES)
 
     class Meta:
         model = Edmonton
         fields = '__all__'
+        read_only_fields = ('usuario', 'usuario_edit', 'fragilidade', 'fatores')
 
-#class UserSerializer(serializers.HyperlinkedModelSerializer):
-#    class Meta:
-#        model = User
-#        fields = '__all__'
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
-
-    '''def create(self, validated_data):
-        user = self.Meta.model(**validated_data)
-        user.set_password(validated_data["password"])
-        #user.save()
-        return user'''
-    
+        fields = ('username', 'password', 'first_name', 'last_name', 'posto', 'user_permissions')
+        read_only_fields = ('id',)
+        #write_only_fields = ('password',)
 
 class AvaliacaoSerializer(serializers.Serializer):
 	id = serializers.IntegerField(read_only=True)
