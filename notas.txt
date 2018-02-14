@@ -1,5 +1,6 @@
 DEPENDENCIAS
 pip install django-multiselectfield
+pip install djangorestframework-jwt
 pip install SQLAlchemy
 pip install mysqlclient
 pip install mysql-connector-python
@@ -7,13 +8,9 @@ pip install pandas
 pip install xlrd
 
 
-DJANGO MULTIPLE CHOICES 
-	* https://pypi.python.org/pypi/django-multiselectfield/	
-	* Add to INSTALED APPS 'multiselectfield'
-
-
-DATABASE INSTRUCTIONS
-https://www.digitalocean.com/community/tutorials/how-to-use-mysql-or-mariadb-with-your-django-application-on-ubuntu-14-04
+LINKS 
+	https://pypi.python.org/pypi/django-multiselectfield/	
+	https://www.digitalocean.com/community/tutorials/how-to-use-mysql-or-mariadb-with-your-django-application-on-ubuntu-14-04
 
 
 
