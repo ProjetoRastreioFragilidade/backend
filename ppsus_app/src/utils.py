@@ -177,7 +177,7 @@ def getFinalRank(df_prox, df_dist, df_feat_cat):
 
 
 # Migra os dados da tabela excel para a base de dados
-def migrate_data():
+def migrate_data(engine, connection):
 
     import pandas as pd
 
@@ -365,23 +365,11 @@ def migrate_data():
     print("DataFrame criado.")
 
 
-    from sqlalchemy import create_engine
-
-    print("Conectando com a base de dados.")
-
-    engine = create_engine('mysql+mysqldb://ppsus:rede243@localhost:3306/ppsus')
-    connection = engine.connect()
-
-    print("Conexao estabelecida com sucesso.")
-
-
-    print("Criando tabela e inserindo dados")
-
     # cria tabela e insere os dados
     df_coleta.to_sql('ppsus_app_coleta', engine, if_exists='replace', index=False)
 
 
-    print("Criando chave primaria para ppsus_app_coleta")
+    print("Tabela criada. Criando chave primaria.")
 
     # cria chave primária para coleta
     connection.execute('ALTER TABLE ppsus_app_coleta ADD COLUMN id INT AUTO_INCREMENT PRIMARY KEY FIRST;')
@@ -395,13 +383,20 @@ def migrate_data():
 def selectColeta():
     import pandas as pd
     from sqlalchemy import create_engine
-    
-    engine = create_engine('mysql+mysqldb://ppsus:rede243@localhost:3306/ppsus')
+    from django.conf import settings
+
+    name = settings.DATABASES['default']['NAME']
+    user = settings.DATABASES['default']['USER']
+    password = settings.DATABASES['default']['PASSWORD']
+    host = settings.DATABASES['default']['HOST']
+    port = settings.DATABASES['default']['PORT']
+
+    engine = create_engine('mysql+mysqldb://'+user+':'+password+'@'+host+':'+port+'/'+name)
     connection = engine.connect()
 
     # se a tabela não foi criada, então cria e insere os dados
     if not engine.dialect.has_table(engine, 'ppsus_app_coleta'):
-        migrate_data()
+        migrate_data(engine, connection)
 
     return pd.read_sql('SELECT * FROM ppsus_app_coleta', con=connection)
 
