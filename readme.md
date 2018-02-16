@@ -1,3 +1,4 @@
+´´´
 DEPENDENCIAS
 pip install django-multiselectfield
 pip install djangorestframework-jwt
@@ -5,13 +6,15 @@ pip install SQLAlchemy
 pip install mysqlclient
 pip install pandas
 pip install xlrd
+´´´
 
-
+´´´
 LINKS 
 	https://pypi.python.org/pypi/django-multiselectfield/	
 	https://www.digitalocean.com/community/tutorials/how-to-use-mysql-or-mariadb-with-your-django-application-on-ubuntu-14-04
+´´´
 
-
+´´´
 # incidencia['internacao_cat'] = df_incidencia[df_incidencia['internacao_cat'] == 2].shape[0]
 # incidencia['doença_renal_cat'] = df_incidencia[df_incidencia['doença_renal_cat'] == 2].shape[0]
 # incidencia['fumo_cat'] = df_incidencia[df_incidencia['fumo_cat'] == 1].shape[0]
@@ -26,3 +29,4 @@ LINKS
 # incidencia['globulinas_cat'] = df_incidencia[df_incidencia['globulinas_cat'] == 1].shape[0]
 # incidencia['hemoglobina_cat'] = df_incidencia[df_incidencia['hemoglobina_cat '] == 1].shape[0]
 # incidencia['hematocrito_cat'] = df_incidencia[df_incidencia['hematocrito_cat '] == 1].shape[0]
+´´´
