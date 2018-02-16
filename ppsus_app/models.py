@@ -46,6 +46,8 @@ class User(AbstractUser):
 	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='user', null=True)
 
 class Paciente(models.Model):
+	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='paciente')
+
 	nome = models.CharField(max_length=100)
 	nro_sus = models.CharField(max_length=15)
 	data_nascimento = models.DateField()
