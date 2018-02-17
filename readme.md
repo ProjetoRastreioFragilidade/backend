@@ -8,6 +8,9 @@ pip install SQLAlchemy
 pip install mysqlclient
 pip install pandas
 pip install xlrd
+
+pip install django-cors-headers
+https://github.com/ottoyiu/django-cors-headers
 ```
 
 
