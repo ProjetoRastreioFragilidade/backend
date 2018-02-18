@@ -10,5 +10,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app
 
+# faz as migrações
+# COPY entrypoint.sh /entrypoint.sh
+# RUN chmod +x /entrypoint.sh
+
 EXPOSE 8000
 CMD ["uwsgi", "--http", ":8000", "--module", "ppsus.wsgi"]
