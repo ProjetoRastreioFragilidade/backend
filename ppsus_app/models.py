@@ -51,7 +51,7 @@ class Paciente(models.Model):
 	nome = models.CharField(max_length=100)
 	nro_sus = models.CharField(max_length=15, unique=True)
 	data_nascimento = models.DateField()
-	end_bairo = models.CharField(max_length=100, null=True, blank=True)
+	end_bairro = models.CharField(max_length=100, null=True, blank=True)
 	end_rua = models.CharField(max_length=100, null=True, blank=True)
 	end_numero = models.CharField(max_length=100, null=True, blank=True)
 	cep = models.CharField(max_length=8, null=True, blank=True)
