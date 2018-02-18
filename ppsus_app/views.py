@@ -87,6 +87,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 class AvaliacaoView(APIView):
+    queryset = Subjetiva.objects.all()
+
     def get(self, request, id_paciente, format=None):
         from itertools import chain
 
@@ -104,6 +106,8 @@ class AvaliacaoView(APIView):
         return Response(serializer.data)
 
 class GetPacienteView(APIView):
+    queryset = Paciente.objects.all()
+
     def get_object(self, n_sus):
         try:
             return Paciente.objects.get(nro_sus=n_sus)
