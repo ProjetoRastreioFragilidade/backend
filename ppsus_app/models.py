@@ -36,39 +36,39 @@ MULTIPLE_CHOICES = (
 
 class Posto(models.Model):
 	nome = models.CharField(max_length=100)
-	end_bairro = models.CharField(max_length=100, null=True)
-	end_rua = models.CharField(max_length=100, null=True)
-	end_numero = models.IntegerField(null=True)
-	cep = models.CharField(max_length=8, null=True)
-	telefone = models.CharField(max_length=11, null=True)
+	end_bairro = models.CharField(max_length=100, null=True, blank=True)
+	end_rua = models.CharField(max_length=100, null=True, blank=True)
+	end_numero = models.IntegerField(null=True, blank=True)
+	cep = models.CharField(max_length=8, null=True, blank=True)
+	telefone = models.CharField(max_length=11, null=True, blank=True)
 
 class User(AbstractUser):
-	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='user', null=True)
+	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='user', null=True, blank=True)
 
 class Paciente(models.Model):
 	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='paciente')
 
 	nome = models.CharField(max_length=100)
-	nro_sus = models.CharField(max_length=15)
+	nro_sus = models.CharField(max_length=15, unique=True)
 	data_nascimento = models.DateField()
-	end_bairo = models.CharField(max_length=100, null=True)
-	end_rua = models.CharField(max_length=100, null=True)
-	end_numero = models.CharField(max_length=100, null=True)
-	cep = models.CharField(max_length=8, null=True)
+	end_bairo = models.CharField(max_length=100, null=True, blank=True)
+	end_rua = models.CharField(max_length=100, null=True, blank=True)
+	end_numero = models.CharField(max_length=100, null=True, blank=True)
+	cep = models.CharField(max_length=8, null=True, blank=True)
 
 class Subjetiva(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='subjetiva')
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='subjetiva')
-	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, related_name='subjetiva_edit')
+	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='subjetiva_edit')
 
 	data_inicio = models.DateTimeField(auto_now_add=True)
 	data_fim = models.DateTimeField(auto_now=True)
 
-	fragilidade = models.CharField(max_length=1, null=True)
-	fatores = models.CharField(max_length=300, null=True)
+	fragilidade = models.CharField(max_length=1, null=True, blank=True)
+	fatores = models.CharField(max_length=300, null=True, blank=True)
 
 	q1_perdeu_peso = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
-	q1_perdeu_peso_kg = models.FloatField(null=True)
+	q1_perdeu_peso_kg = models.FloatField(null=True, blank=True)
 	q2_ativ_fisica = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
 	q3_red_forca = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
 	q4_red_caminhada = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
@@ -78,13 +78,13 @@ class Subjetiva(models.Model):
 class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='edmonton')
-	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, related_name='edmonton_edit')
+	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='edmonton_edit')
 	
 	data_inicio = models.DateTimeField(auto_now_add=True)
 	data_fim = models.DateTimeField(auto_now=True)
 
-	fragilidade = models.CharField(max_length=1, null=True)
-	fatores = models.CharField(max_length=300, null=True)
+	fragilidade = models.CharField(max_length=1, null=True, blank=True)
+	fatores = models.CharField(max_length=300, null=True, blank=True)
 
 	q1_cognicao = models.PositiveSmallIntegerField(
 		choices=((1, 'Aprovado'),
