@@ -15,4 +15,4 @@ COPY . /usr/src/app
 # RUN chmod +x /entrypoint.sh
 
 EXPOSE 8000
-CMD ["uwsgi", "--http", ":8000", "--module", "ppsus.wsgi"]
+CMD ["sh", "entrypoint.sh"]
