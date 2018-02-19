@@ -45,6 +45,12 @@ class SubjetivaViewSet(viewsets.ModelViewSet):
             usuario_edit=self.request.user, 
             fragilidade=fragilidade,
             fatores=fatores)
+            
+    def retrieve(self, request, pk=None):
+        queryset = User.objects.all()
+        user = get_object_or_404(queryset, pk=pk)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
 class EdmontonViewSet(viewsets.ModelViewSet):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
