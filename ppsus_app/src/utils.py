@@ -6,17 +6,17 @@ def getVetAnswer(aval, data):
     if aval == 'subjetiva':
         vet_answ = [0, 0, 0, 0, 0, 0]
 
-        if data['q1_perdeu_peso'] == '1' and float(data['q1_perdeu_peso_kg']) >= 4.5:
+        if int(data['q1_perdeu_peso']) == 1 and float(data['q1_perdeu_peso_kg']) >= 4.5:
             vet_answ[0] = 1
-        if data['q2_ativ_fisica'] == '1':
+        if int(data['q2_ativ_fisica']) == 1:
             vet_answ[1] = 1
-        if data['q3_red_forca'] == '1':
+        if int(data['q3_red_forca']) == 1:
             vet_answ[2] = 1
-        if data['q4_red_caminhada'] == '1':
+        if int(data['q4_red_caminhada']) == 1:
             vet_answ[3] = 1
-        if data['q5_fadiga'] in ('4', '3', '2'):
+        if int(data['q5_fadiga']) in (4, 3, 2):
             vet_answ[4] = 1
-        if data['q6_desanimo'] in ('4', '3', '2'):
+        if int(data['q6_desanimo']) in (4, 3, 2):
             vet_answ[5] = 1
     else:
         vet_answ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -39,29 +39,29 @@ def getVetAnswer(aval, data):
             vet_answ[3] += 1
 
         # questão 4
-        if data['q4_sup_social'] == '3':
+        if int(data['q4_sup_social']) == 3:
             vet_answ[4] += 2
         else:
             vet_answ[4] += 1
 
         # qustão 5 A
-        if data['q5_medicamento_A'] == '1':
+        if int(data['q5_medicamento_A']) == 1:
             vet_answ[5] += 1
 
         # qustão 5 B
-        if data['q5_medicamento_B'] == '1':
+        if int(data['q5_medicamento_B']) == 1:
             vet_answ[6] += 1
 
         # qustão 6
-        if data['q6_nutricao'] == '1':
+        if int(data['q6_nutricao']) == 1:
             vet_answ[7] += 1
 
         # qustão 7
-        if data['q7_humor'] == '1':
+        if int(data['q7_humor']) == 1:
             vet_answ[8] += 1
 
         # qustão 8
-        if data['q8_continencia'] == '1':
+        if int(data['q8_continencia']) == 1:
             vet_answ[9] += 1
 
         # questão 9
