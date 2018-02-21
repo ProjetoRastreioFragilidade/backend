@@ -120,7 +120,7 @@ class Edmonton(models.Model):
 				 (2, '11-20 segundos'),
 				 (3, '21 segundos ou mais'),)
 	)
-	q9_desemp_func_tempo = models.TimeField()
+	q9_desemp_func_tempo = models.PositiveSmallIntegerField()
 
 
 
