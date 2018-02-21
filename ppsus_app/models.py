@@ -104,7 +104,7 @@ class Edmonton(models.Model):
 				 (4, 'Razoável'),
 				 (5, 'Ruim'),)
 	)
-	q3_ind_func = MultiSelectField(choices=MULTIPLE_CHOICES)
+	q3_ind_func = MultiSelectField(choices=MULTIPLE_CHOICES, null=True, blank=True)
 	q4_sup_social = models.PositiveSmallIntegerField(
 		choices=((1, 'Sempre'),
 				 (2, 'As vezes'),
