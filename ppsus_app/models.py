@@ -61,7 +61,7 @@ class Subjetiva(models.Model):
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='subjetiva')
 	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='subjetiva_edit')
 
-	data_inicio = models.DateTimeField(auto_now_add=True)
+	data_inicio = models.DateTimeField()
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
@@ -80,7 +80,7 @@ class Edmonton(models.Model):
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='edmonton')
 	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='edmonton_edit')
 	
-	data_inicio = models.DateTimeField(auto_now_add=True)
+	data_inicio = models.DateTimeField()
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
