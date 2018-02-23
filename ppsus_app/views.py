@@ -29,7 +29,6 @@ class SubjetivaViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         fragilidade, vet_answ = functions.getFragilidadeSubjetiva(self.request.data)
-
         fatores = functions.getFatores('subjetiva', fragilidade, vet_answ)
 
         serializer.save(
@@ -46,9 +45,7 @@ class SubjetivaViewSet(viewsets.ModelViewSet):
             fragilidade=fragilidade,
             fatores=fatores)
 
-class EdmontonViewSet(viewsets.ModelViewSet):
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
-    
+class EdmontonViewSet(viewsets.ModelViewSet):    
     queryset = Edmonton.objects.all()
     serializer_class = EdmontonSerializer
 
