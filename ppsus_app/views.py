@@ -15,6 +15,10 @@ from ppsus_app.permissions import IsOwnerOrReadOnly
 from ppsus_app.src import functions
 
 
+class DocumentViewSet(viewsets.ModelViewSet):
+    queryset = Document.objects.all()
+    serializer_class = DocumentSerializer
+
 class PostoViewSet(viewsets.ModelViewSet):
     queryset = Posto.objects.all()
     serializer_class = PostoSerializer

@@ -11,6 +11,7 @@ router.register(r'paciente', views.PacienteViewSet)
 router.register(r'subjetiva', views.SubjetivaViewSet)
 router.register(r'edmonton', views.EdmontonViewSet)
 router.register(r'users', views.UserViewSet)
+router.register(r'upload', views.DocumentViewSet)
 #router.register(r'avaliacoes', views.AvaliacaoView, base_name='avaliacoes/$')
 
 

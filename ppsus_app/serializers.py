@@ -40,4 +40,8 @@ class AvaliacaoSerializer(serializers.Serializer):
 	data_fim = serializers.DateTimeField(read_only=True) 
 	tipo = serializers.CharField(read_only=True)
 
-    
+
+class DocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Document
+        fields = '__all__'

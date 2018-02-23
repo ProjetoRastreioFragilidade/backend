@@ -123,8 +123,9 @@ class Edmonton(models.Model):
 	)
 	q9_desemp_func_tempo = models.PositiveSmallIntegerField()
 
-
-
+class Document(models.Model):
+    	image = models.ImageField(upload_to='uploads/%Y/%m/%d/')
+		
 # This receiver handles token creation immediately a new user is created.
 @receiver(post_save, sender=User)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
