@@ -19,7 +19,7 @@ class SubjetivaSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ('usuario', 'usuario_edit', 'fragilidade', 'fatores')
 
-class EdmontonSerializer(serializers.ModelSerializer):
+class EdmontonSerializer(serializers.HyperlinkedModelSerializer):
     q3_ind_func = fields.MultipleChoiceField(choices=MULTIPLE_CHOICES)
 
     class Meta:
@@ -41,7 +41,7 @@ class AvaliacaoSerializer(serializers.Serializer):
 	tipo = serializers.CharField(read_only=True)
 
 
-class DocumentSerializer(serializers.ModelSerializer):
+class DocumentSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Document
-        fields = '__all__'
+        fields = ('url', 'image')

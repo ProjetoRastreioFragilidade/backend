@@ -75,11 +75,15 @@ class Subjetiva(models.Model):
 	q5_fadiga = models.PositiveSmallIntegerField(choices=CHOICES_FREQ)
 	q6_desanimo = models.PositiveSmallIntegerField(choices=CHOICES_FREQ)
 
+class Document(models.Model):
+	image = models.ImageField(upload_to='%Y/%m/%d/')
+
 class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='edmonton')
 	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='edmonton_edit')
-	
+	q1_foto_relogio = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='edmonton')
+
 	data_inicio = models.DateTimeField()
 	data_fim = models.DateTimeField(auto_now=True)
 
@@ -92,7 +96,7 @@ class Edmonton(models.Model):
 				 (3, 'Reprovado com erros significantes'),)
 	)
 	#q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/')
-	q1_foto_relogio = models.CharField(max_length=200)
+	#q1_foto_relogio = models.CharField(max_length=200)
 	q2_estado_saude_A = models.PositiveSmallIntegerField(
 		choices=((1, '0'),
 				 (2, '1 ou 2'),
@@ -122,9 +126,6 @@ class Edmonton(models.Model):
 				 (3, '21 segundos ou mais'),)
 	)
 	q9_desemp_func_tempo = models.PositiveSmallIntegerField()
-
-class Document(models.Model):
-    	image = models.ImageField(upload_to='uploads/%Y/%m/%d/')
 		
 # This receiver handles token creation immediately a new user is created.
 @receiver(post_save, sender=User)

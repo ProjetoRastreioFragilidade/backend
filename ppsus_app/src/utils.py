@@ -32,11 +32,12 @@ def getVetAnswer(aval, data):
             vet_answ[2] = int(data['q2_estado_saude_B']) - 3
 
         # questão 3
-        qtd = len(data['q3_ind_func'])
-        if qtd > 3:
-            vet_answ[3] += 2
-        elif qtd > 0:
-            vet_answ[3] += 1
+        if 'q3_ind_func' in data:
+            qtd = len(dict(data)['q3_ind_func'])
+            if qtd > 3:
+                vet_answ[3] += 2
+            elif qtd > 0:
+                vet_answ[3] += 1
                 
         # questão 4
         if int(data['q4_sup_social']) == 3:
