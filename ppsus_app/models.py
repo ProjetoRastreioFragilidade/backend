@@ -91,7 +91,8 @@ class Edmonton(models.Model):
 				 (2, 'Reprovado com erros mínimos'),
 				 (3, 'Reprovado com erros significantes'),)
 	)
-	q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/')
+	#q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/')
+	q1_foto_relogio = models.CharField(max_length=200)
 	q2_estado_saude_A = models.PositiveSmallIntegerField(
 		choices=((1, '0'),
 				 (2, '1 ou 2'),
