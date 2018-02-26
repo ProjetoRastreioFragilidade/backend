@@ -82,7 +82,7 @@ class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')
 	usuario = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, related_name='edmonton')
 	usuario_edit = models.ForeignKey('ppsus_app.User', on_delete=models.CASCADE, null=True, blank=True, related_name='edmonton_edit')
-	q1_foto_relogio = models.ForeignKey(Document, on_delete=models.CASCADE, related_name='edmonton')
+	q1_foto_relogio = models.CharField(max_length=200)
 
 	data_inicio = models.DateTimeField()
 	data_fim = models.DateTimeField(auto_now=True)
