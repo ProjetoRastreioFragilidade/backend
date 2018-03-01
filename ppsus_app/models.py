@@ -77,6 +77,11 @@ class Subjetiva(models.Model):
 
 class Document(models.Model):
 	image = models.ImageField(upload_to='%Y/%m/%d/')
+	@property
+	
+	def image_url(self):
+		return self.image.url
+
 
 class Edmonton(models.Model):
 	paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, related_name='edmonton')

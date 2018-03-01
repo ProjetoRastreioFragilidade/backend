@@ -41,7 +41,9 @@ class AvaliacaoSerializer(serializers.Serializer):
 	tipo = serializers.CharField(read_only=True)
 
 
-class DocumentSerializer(serializers.HyperlinkedModelSerializer):
+class DocumentSerializer(serializers.ModelSerializer):
+    imge_url = serializers.Field()
+
     class Meta:
         model = Document
-        fields = ('url', 'image')
+        fields = ('id', 'image_url')
