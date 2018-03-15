@@ -49,6 +49,8 @@ class Paciente(models.Model):
 	posto = models.ForeignKey(Posto, on_delete=models.CASCADE, related_name='paciente')
 
 	nome = models.CharField(max_length=100)
+	sexo = models.PositiveSmallIntegerField(choices=((0, "Masculino"), 
+													 (1, "Feminino")), null=True, blank=True)
 	nro_sus = models.CharField(max_length=15, unique=True)
 	data_nascimento = models.DateField()
 	end_bairro = models.CharField(max_length=100, null=True, blank=True)
