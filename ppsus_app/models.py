@@ -132,7 +132,7 @@ class Edmonton(models.Model):
 				 (2, '11-20 segundos'),
 				 (3, '21 segundos ou mais'),)
 	)
-	q9_desemp_func_tempo = models.PositiveSmallIntegerField()
+	q9_desemp_func_tempo = models.FloatField()
 		
 # This receiver handles token creation immediately a new user is created.
 @receiver(post_save, sender=User)
