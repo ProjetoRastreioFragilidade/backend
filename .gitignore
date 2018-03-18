@@ -1,3 +1,5 @@
+/ppsus_app/migrations/*
+
 *.pyc
 
 /media/*
