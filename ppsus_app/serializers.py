@@ -42,7 +42,8 @@ class AvaliacaoSerializer(serializers.Serializer):
 
 
 class DocumentSerializer(serializers.ModelSerializer):
-    
+    imge_url = serializers.Field()
+
     class Meta:
         model = Document
-        fields = ('image', 'image_url',)
+        fields = ('id', 'image_url')
