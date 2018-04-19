@@ -14,9 +14,9 @@ def getVetAnswer(aval, data):
             vet_answ[2] = 1
         if int(data['q4_red_caminhada']) == 1:
             vet_answ[3] = 1
-        if int(data['q5_fadiga']) in (4, 3, 2):
+        if int(data['q5_fadiga']) in (4, 3):
             vet_answ[4] = 1
-        if int(data['q6_desanimo']) in (4, 3, 2):
+        if int(data['q6_desanimo']) in (4, 3):
             vet_answ[5] = 1
     else:
         vet_answ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]

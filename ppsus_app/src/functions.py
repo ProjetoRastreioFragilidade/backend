@@ -41,7 +41,10 @@ def getFatores(aval, classe, vet_answ):
 def getFragilidadeSubjetiva(data):
 	vet_answ = utils.getVetAnswer('subjetiva', data)
 	score = sum(vet_answ)
-	
+
+	if vet_answ[4] == 1 and vet_answ[5] == 1:
+		score -= 1
+
 	if score == 0:
 		return 'N', vet_answ
 	elif score < 3:
