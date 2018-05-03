@@ -33,20 +33,30 @@ class SubjetivaViewSet(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         fragilidade, vet_answ = functions.getFragilidadeSubjetiva(self.request.data)
+        score = sum(vet_answ)
         fatores = functions.getFatores('subjetiva', fragilidade, vet_answ)
+        # questão 5 e 6 juntas podem pontuar no máximo 1
+        if vet_answ[4] == 1 and vet_answ[5] == 1:
+            score -= 1
 
         serializer.save(
             usuario=self.request.user, 
             fragilidade=fragilidade,
+            score=score,
             fatores=fatores)
 
     def perform_update(self, serializer):
         fragilidade, vet_answ = functions.getFragilidadeSubjetiva(self.request.data)
+        score = sum(vet_answ)
         fatores = functions.getFatores('subjetiva', fragilidade, vet_answ)
+        # questão 5 e 6 juntas podem pontuar no máximo 1
+        if vet_answ[4] == 1 and vet_answ[5] == 1:
+            score -= 1
 
         serializer.save(
             usuario_edit=self.request.user, 
             fragilidade=fragilidade,
+            score=score,
             fatores=fatores)
 
 class EdmontonViewSet(viewsets.ModelViewSet):    
@@ -55,20 +65,24 @@ class EdmontonViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         fragilidade, vet_answ = functions.getFragilidadeEdmonton(self.request.data)
+        score = sum(vet_answ)
         fatores = functions.getFatores('edmonton', fragilidade, vet_answ)
-
+        
         serializer.save(
             usuario=self.request.user, 
             fragilidade=fragilidade,
+            score=score,
             fatores=fatores)
 
     def perform_update(self, serializer):
         fragilidade, vet_answ = functions.getFragilidadeEdmonton(self.request.data)
+        score = sum(vet_answ)
         fatores = functions.getFatores('edmonton', fragilidade, vet_answ)
 
         serializer.save(
             usuario_edit=self.request.user, 
             fragilidade=fragilidade,
+            score=score,
             fatores=fatores)            
 
 #class UserViewSet(viewsets.ReadOnlyModelViewSet):

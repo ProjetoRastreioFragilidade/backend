@@ -67,8 +67,9 @@ class Subjetiva(models.Model):
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
+	score = models.PositiveSmallIntegerField()
 	fatores = models.CharField(max_length=300, null=True, blank=True)
-
+	
 	q1_perdeu_peso = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
 	q1_perdeu_peso_kg = models.FloatField(null=True, blank=True)
 	q2_ativ_fisica = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
@@ -95,15 +96,14 @@ class Edmonton(models.Model):
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
+	score = models.PositiveSmallIntegerField()
 	fatores = models.CharField(max_length=300, null=True, blank=True)
-
+	
 	q1_cognicao = models.PositiveSmallIntegerField(
 		choices=((1, 'Aprovado'),
 				 (2, 'Reprovado com erros mínimos'),
 				 (3, 'Reprovado com erros significantes'),)
 	)
-	#q1_foto_relogio = models.ImageField(upload_to='uploads/%Y/%m/%d/')
-	#q1_foto_relogio = models.CharField(max_length=200)
 	q2_estado_saude_A = models.PositiveSmallIntegerField(
 		choices=((1, '0'),
 				 (2, '1 ou 2'),

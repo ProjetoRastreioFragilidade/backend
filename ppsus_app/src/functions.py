@@ -41,7 +41,8 @@ def getFatores(aval, classe, vet_answ):
 def getFragilidadeSubjetiva(data):
 	vet_answ = utils.getVetAnswer('subjetiva', data)
 	score = sum(vet_answ)
-
+	
+	# questão 5 e 6 juntas podem pontuar no máximo 1
 	if vet_answ[4] == 1 and vet_answ[5] == 1:
 		score -= 1
 
@@ -55,10 +56,19 @@ def getFragilidadeSubjetiva(data):
 def getFragilidadeEdmonton(data):
 	vet_answ = utils.getVetAnswer('edmonton', data)
 	score = sum(vet_answ)
-
+	
+	# Não apresenta fragilidade
 	if score <= 4:
 		return 'N', vet_answ
+	# Aparentemente vulnerável
 	elif score <= 6:
-		return 'P', vet_answ
+		return 'V', vet_answ
+	# Fragilidade leve
+	elif score <= 8:
+		return 'L', vet_answ
+	# Fragilidade moderada
+	elif score <= 10:
+		return 'M', vet_answ
+	# Fragilidade severa
 	else:
-		return 'F', vet_answ
+		return 'S', vet_answ

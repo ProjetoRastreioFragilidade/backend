@@ -1,6 +1,6 @@
-#-----------------#
-# Vetor respostas #
-#-----------------#
+#-------------------------------------#
+# Vetor da pontuação em cada resposta #
+#-------------------------------------#
 def getVetAnswer(aval, data):
 
     if aval == 'subjetiva':
@@ -21,51 +21,37 @@ def getVetAnswer(aval, data):
     else:
         vet_answ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-        # questão 1
         vet_answ[0] = int(data['q1_cognicao']) - 1
 
-        # questão 2 A
         vet_answ[1] = int(data['q2_estado_saude_A']) - 1
 
-        # questão 2 B
         if int(data['q2_estado_saude_B']) >= 4:
             vet_answ[2] = int(data['q2_estado_saude_B']) - 3
 
-        # questão 3
         if 'q3_ind_func' in data:
             qtd = len(dict(data)['q3_ind_func'])
-            if qtd > 3:
+            if qtd >= 5:
                 vet_answ[3] += 2
-            elif qtd > 0:
+            elif qtd >= 2:
                 vet_answ[3] += 1
                 
-        # questão 4
-        if int(data['q4_sup_social']) == 3:
-            vet_answ[4] += 2
-        else:
-            vet_answ[4] += 1
+        vet_answ[4] = int(data['q4_sup_social']) - 1
 
-        # qustão 5 A
         if int(data['q5_medicamento_A']) == 1:
             vet_answ[5] += 1
 
-        # qustão 5 B
         if int(data['q5_medicamento_B']) == 1:
             vet_answ[6] += 1
 
-        # qustão 6
         if int(data['q6_nutricao']) == 1:
             vet_answ[7] += 1
 
-        # qustão 7
         if int(data['q7_humor']) == 1:
             vet_answ[8] += 1
 
-        # qustão 8
         if int(data['q8_continencia']) == 1:
             vet_answ[9] += 1
 
-        # questão 9
         vet_answ[10] += int(data['q9_desemp_func']) - 1
 
     return vet_answ
