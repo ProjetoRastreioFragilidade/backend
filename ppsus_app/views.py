@@ -133,3 +133,102 @@ class GetPacienteView(APIView):
         paciente = self.get_object(n_sus)
         serializer = PacienteSerializer(paciente)
         return Response(serializer.data)
+
+# resgata a quantidade de idosos por fragilidade, sexo e faixa etária
+class RelatorioView(APIView):
+    queryset = Paciente.objects.all()
+
+    def get(self, request):
+        # listas auxiliares
+        avals  = ['subjetiva', 'edmonton']
+        f_edm  = ['N', 'V', 'L', 'M', 'S']
+        f_sub  = ['N', 'P', 'F']
+        sexos  = ['M', 'F']
+        idades = ['00-69', '70-79', '80+']
+        dicts  = [{f : 0 for f in f_sub}, {f : 0 for f in f_edm}]
+        
+        # construindo dicionário de retorno
+        ret = {}
+        ret['geral'] = {aval : dict(dic) for aval, dic in zip(avals, dicts)}
+        ret['sexo'] = {aval : {sexo : dict(dicts[i]) for sexo in sexos} for i, aval in enumerate(avals)}
+        ret['idade'] = {aval : {idade : dict(dicts[i]) for idade in idades} for i, aval in enumerate(avals)}
+
+        ## GERAL
+        query_geral_sub = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_subjetiva ON ppsus_app_paciente.id = ppsus_app_subjetiva.paciente_id WHERE ppsus_app_subjetiva.fragilidade = {} AND ppsus_app_subjetiva.data_inicio = (SELECT max(ppsus_app_subjetiva.data_inicio) FROM ppsus_app_subjetiva WHERE ppsus_app_subjetiva.paciente_id = ppsus_app_paciente.id)"
+        query_geral_edm = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_edmonton ON ppsus_app_paciente.id = ppsus_app_edmonton.paciente_id WHERE ppsus_app_edmonton.fragilidade = {} AND ppsus_app_edmonton.data_inicio = (SELECT max(ppsus_app_edmonton.data_inicio) FROM ppsus_app_edmonton WHERE ppsus_app_edmonton.paciente_id = ppsus_app_paciente.id)"
+        soma = 0
+        for f in f_sub:
+            qtd = len(list(Paciente.objects.raw(query_geral_sub.format("\'"+f+"\'"))))
+            ret['geral']['subjetiva'][f] = qtd
+            soma += qtd
+        for f in f_sub:
+            ret['geral']['subjetiva'][f] = ret['geral']['subjetiva'][f] * (100/soma)
+        
+        soma = 0
+        for f in f_edm:
+            qtd = len(list(Paciente.objects.raw(query_geral_edm.format("\'"+f+"\'"))))
+            ret['geral']['edmonton'][f] = qtd
+            soma += qtd
+        for f in f_edm:
+            ret['geral']['edmonton'][f] = ret['geral']['edmonton'][f] * (100/soma)
+        
+
+        ## POR SEXO
+        query_sexo_sub = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_subjetiva ON ppsus_app_paciente.id = ppsus_app_subjetiva.paciente_id WHERE ppsus_app_subjetiva.fragilidade = {} AND ppsus_app_paciente.sexo = {} AND ppsus_app_subjetiva.data_inicio = (SELECT max(ppsus_app_subjetiva.data_inicio) FROM ppsus_app_subjetiva WHERE ppsus_app_subjetiva.paciente_id = ppsus_app_paciente.id)"
+        query_sexo_edm = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_edmonton ON ppsus_app_paciente.id = ppsus_app_edmonton.paciente_id WHERE ppsus_app_edmonton.fragilidade = {} AND ppsus_app_paciente.sexo = {} AND ppsus_app_edmonton.data_inicio = (SELECT max(ppsus_app_edmonton.data_inicio) FROM ppsus_app_edmonton WHERE ppsus_app_edmonton.paciente_id = ppsus_app_paciente.id)"
+            
+        for s in sexos:
+            s_ = {'M' : 0, 'F' : 1}[s]
+            soma = 0
+            for f in f_sub:
+                qtd = len(list(Paciente.objects.raw(query_sexo_sub.format("\'"+f+"\'", s_))))
+                ret['sexo']['subjetiva'][s][f] = qtd
+                soma += qtd
+            if soma > 0:
+                for f in f_sub:
+                    ret['sexo']['subjetiva'][s][f] = ret['sexo']['subjetiva'][s][f] * (100/soma)
+
+            soma = 0
+            for f in f_edm:
+                qtd = len(list(Paciente.objects.raw(query_sexo_edm.format("\'"+f+"\'", s_))))
+                ret['sexo']['edmonton'][s][f] = qtd
+                soma += qtd
+            if soma > 0:
+                for f in f_edm:
+                    ret['sexo']['edmonton'][s][f] = ret['sexo']['edmonton'][s][f] * (100/soma)
+
+        ## POR IDADE
+        query_idade_sub = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_subjetiva ON ppsus_app_paciente.id = ppsus_app_subjetiva.paciente_id WHERE ppsus_app_subjetiva.fragilidade = {} AND ppsus_app_paciente.data_nascimento BETWEEN {} AND {} AND ppsus_app_subjetiva.data_inicio = (SELECT max(ppsus_app_subjetiva.data_inicio) FROM ppsus_app_subjetiva WHERE ppsus_app_subjetiva.paciente_id = ppsus_app_paciente.id)"
+        query_idade_edm = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_edmonton ON ppsus_app_paciente.id = ppsus_app_edmonton.paciente_id WHERE ppsus_app_edmonton.fragilidade = {} AND ppsus_app_paciente.data_nascimento BETWEEN {} AND {} AND ppsus_app_edmonton.data_inicio = (SELECT max(ppsus_app_edmonton.data_inicio) FROM ppsus_app_edmonton WHERE ppsus_app_edmonton.paciente_id = ppsus_app_paciente.id)"
+        
+        from datetime import datetime, timedelta
+        from .src.utils import sub_years, sub_days
+        
+        for i in idades:
+            di, df = {'00-69' : (sub_years(datetime.now().date(), 69), datetime.now().date()), 
+                      '70-79' : (sub_years(datetime.now().date(), 79), sub_days(sub_years(datetime.now().date(), 69), 1)),
+                      '80+'   : (sub_years(datetime.now().date(), 200), sub_days(sub_years(datetime.now().date(), 79), 1))}[i]
+            
+            print("##############")
+            print("{} até {}".format("\'"+str(di)+"\'", "\'"+str(df)+"\'"))
+            print("##############")
+            
+            soma = 0
+            for f in f_sub:
+                qtd = len(list(Paciente.objects.raw(query_idade_sub.format("\'"+f+"\'", "\'"+str(di)+"\'", "\'"+str(df)+"\'"))))
+                ret['idade']['subjetiva'][i][f] = qtd
+                soma += qtd
+            if soma > 0:
+                for f in f_sub:
+                    ret['idade']['subjetiva'][i][f] = ret['idade']['subjetiva'][i][f] * (100/soma)
+
+            soma = 0
+            for f in f_edm:
+                qtd = len(list(Paciente.objects.raw(query_idade_edm.format("\'"+f+"\'", "\'"+str(di)+"\'", "\'"+str(df)+"\'"))))
+                ret['idade']['edmonton'][i][f] = qtd
+                soma += qtd
+            if soma > 0:
+                for f in f_edm:
+                    ret['idade']['edmonton'][i][f] = ret['idade']['edmonton'][i][f] * (100/soma)
+
+        return Response(ret)

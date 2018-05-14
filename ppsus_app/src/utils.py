@@ -387,6 +387,21 @@ def selectColeta():
 
     return pd.read_sql('SELECT * FROM ppsus_app_coleta', con=connection)
 
+# Subtrai 'years' de uma data 'd' e retorna a pŕoxima data válida
+def sub_years(d, years):
+    from datetime import datetime
+    try:
+        return d.replace(year = d.year - years)
+    except ValueError:
+        return d + (datetime.date(d.year - years, 1, 1) - datetime.date(d.year, 1, 1))
+
+# subtrai 'days' de uma data 'd' e retorna a pŕoxima data válida
+def sub_days(d, days):
+    from datetime import timedelta
+    try:
+        return d - timedelta(days=days)
+    except ValueError:
+        return sub_days(d, days-1)
 
 #***********#
 # ATRIBUTOS #

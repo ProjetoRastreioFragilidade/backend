@@ -14,13 +14,14 @@ router.register(r'edmonton', views.EdmontonViewSet)
 router.register(r'users', views.UserViewSet)
 router.register(r'upload', views.DocumentViewSet)
 
-
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
 	url(r'^', include(router.urls)),
 	url(r'^avaliacoes/(?P<id_paciente>[0-9]+)/$', views.AvaliacaoView.as_view()),
 	url(r'^busca/(?P<n_sus>[0-9]+)/$', views.GetPacienteView.as_view()),
 	url(r'^uploads/[0-9]+/[0-9]+/[0-9]+/$', views.DocumentViewSet),
+
+	url(r'^relatorio/', views.RelatorioView.as_view()),
 	
 
 	url(r'^api-token-auth/', obtain_jwt_token),
