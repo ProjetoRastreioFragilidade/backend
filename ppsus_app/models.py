@@ -67,7 +67,7 @@ class Subjetiva(models.Model):
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
-	score = models.PositiveSmallIntegerField()
+	score = models.PositiveSmallIntegerField(null=True)
 	fatores = models.CharField(max_length=300, null=True, blank=True)
 	
 	q1_perdeu_peso = models.PositiveSmallIntegerField(choices=CHOICES_SIM_NAO_4)
@@ -96,7 +96,7 @@ class Edmonton(models.Model):
 	data_fim = models.DateTimeField(auto_now=True)
 
 	fragilidade = models.CharField(max_length=1, null=True, blank=True)
-	score = models.PositiveSmallIntegerField()
+	score = models.PositiveSmallIntegerField(null=True)
 	fatores = models.CharField(max_length=300, null=True, blank=True)
 	
 	q1_cognicao = models.PositiveSmallIntegerField(
