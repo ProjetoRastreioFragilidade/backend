@@ -21,37 +21,48 @@ def getVetAnswer(aval, data):
     else:
         vet_answ = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+        # relógio: 0 pontos aprovado; 1 ponto com erros mínimos, 2 pontos erros significativos;
         vet_answ[0] = int(data['q1_cognicao']) - 1
 
+        # nos ultimos 12 meses quando vezes foi internado: 0 (0) ponto; (1) 1-2 e (2) >2;
         vet_answ[1] = int(data['q2_estado_saude_A']) - 1
 
+        # descreve sua saúde (0) para excelente, muito boa e boa; (1) razoavel; (2) ruim;
         if int(data['q2_estado_saude_B']) >= 4:
             vet_answ[2] = int(data['q2_estado_saude_B']) - 3
 
+        # ajuda para as atividades: (0) 0; (1) 2-4 atividades e (2) 5-8 atividades;
         if 'q3_ind_func' in data:
             qtd = len(dict(data)['q3_ind_func'])
             if qtd >= 5:
                 vet_answ[3] += 2
             elif qtd >= 2:
                 vet_answ[3] += 1
-                
+
+        # precisa de ajuda tem com quem contar (0) sempre; (1) algumas vezes/ (2) nunca;
         vet_answ[4] = int(data['q4_sup_social']) - 1
 
+        # cinco medicamentos (0) não; (1) sim;
         if int(data['q5_medicamento_A']) == 1:
             vet_answ[5] += 1
 
+        # esquece de tomar remedios  (0) não; (1) sim;
         if int(data['q5_medicamento_B']) == 1:
             vet_answ[6] += 1
 
+        # perdido peso  (0) não; (1) sim;
         if int(data['q6_nutricao']) == 1:
             vet_answ[7] += 1
 
+        # se sente triste ou deprimido (0) não; (1) sim;
         if int(data['q7_humor']) == 1:
             vet_answ[8] += 1
 
+        # problema da perda de urina  (0) não; (1) sim;
         if int(data['q8_continencia']) == 1:
             vet_answ[9] += 1
-
+            
+        # teste da caminhada (0) 0-10 segundos; (1) 11-20 segundos; (2) >20 segundos
         vet_answ[10] += int(data['q9_desemp_func']) - 1
 
     return vet_answ

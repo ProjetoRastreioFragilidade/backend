@@ -24,16 +24,18 @@ def getFatores(aval, classe, vet_answ):
 	exemplos = utils.getIdsByMaxDistance(aval, dist_max, vet_answ, df_answ)
 	        
 	
-	if len(exemplos) >= 0.1*df_answ.shape[0]:
-	    df_prox = df_feat.loc[exemplos]
-	else:
-	    exemplos = df_answ[df_answ[aval] == classe].index
-	    df_prox = df_feat.loc[exemplos]
+	if len(exemplos) < 0.1*df_answ.shape[0]:
+		# Severa não tem 10% da base, por isso juntamos com Moderada
+		if classe=='S':
+			exemplos = df_answ.query('edmonton=="S" or edmonton=="M"').index
+		else:
+			exemplos = df_answ.query(aval+'=="'+classe+'"').index
+
+	df_prox = df_feat.loc[exemplos]
 
 	# definindo data set de indivíduos distantes #
 	# usa o complementar, ou seja, todo mundo que não está no data set próximos
-	exemplos_dist = [i for i in range(df_answ.shape[0]) if i not in df_prox.index]
-	df_dist = df_feat.loc[exemplos_dist]
+	df_dist = df_feat.loc[ ~df_feat.index.isin(exemplos) ]
 
 	return utils.getFinalRank(df_prox, df_dist, df_feat_cat)
 
