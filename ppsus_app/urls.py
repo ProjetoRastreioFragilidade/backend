@@ -21,9 +21,14 @@ urlpatterns = [
 	url(r'^busca/(?P<n_sus>[0-9]+)/$', views.GetPacienteView.as_view()),
 	url(r'^uploads/[0-9]+/[0-9]+/[0-9]+/$', views.DocumentViewSet),
 
-	url(r'^relatorio/', views.RelatorioView.as_view()),
+	url(r'^relatorio/geral/(?P<posto_id>[0-9]+)/$', views.RelatorioGeralView.as_view()),
+	url(r'^relatorio/geral/$', views.RelatorioGeralView.as_view()),
+		
+	url(r'^relatorio/paciente/(?P<posto_id>[0-9]+)/$', views.RelatorioPacienteView.as_view()),
+	url(r'^relatorio/paciente/$', views.RelatorioPacienteView.as_view()),
+		
+	#(?:/(?P<title   >[0-9]+))?/$
 	
-
 	url(r'^api-token-auth/', obtain_jwt_token),
 	url(r'^api-token-refresh/', refresh_jwt_token),
 
