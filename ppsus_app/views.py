@@ -202,7 +202,8 @@ class RelatorioGeralView(APIView):
             ret['geral']['subjetiva'][f] = qtd
             soma += qtd
         for f in f_sub:
-            ret['geral']['subjetiva'][f] = ret['geral']['subjetiva'][f] * (100/soma)
+            if soma > 0:
+                ret['geral']['subjetiva'][f] = ret['geral']['subjetiva'][f] * (100/soma)
         
         soma = 0
         for f in f_edm:
@@ -214,7 +215,8 @@ class RelatorioGeralView(APIView):
             ret['geral']['edmonton'][f] = qtd
             soma += qtd
         for f in f_edm:
-            ret['geral']['edmonton'][f] = ret['geral']['edmonton'][f] * (100/soma)
+            if soma > 0:
+                ret['geral']['edmonton'][f] = ret['geral']['edmonton'][f] * (100/soma)
         
 
         ## POR SEXO
