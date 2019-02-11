@@ -191,7 +191,7 @@ class RelatorioGeralView(APIView):
             query_geral_sub = query_geral_sub.replace('WHERE', 'WHERE ppsus_app_paciente.posto_id = {} AND ', 1)
             query_geral_edm = query_geral_edm.replace('WHERE', 'WHERE ppsus_app_paciente.posto_id = {} AND ', 1)
                 
-
+        # Subjetiva
         soma = 0
         for f in f_sub:
             if posto_id is None:
@@ -203,8 +203,10 @@ class RelatorioGeralView(APIView):
             soma += qtd
         for f in f_sub:
             if soma > 0:
-                ret['geral']['subjetiva'][f] = ret['geral']['subjetiva'][f] * (100/soma)
+                qtd = ret['geral']['subjetiva'][f] 
+                ret['geral']['subjetiva'][f] = ( qtd*(100/soma), qtd )
         
+        # Edmonton
         soma = 0
         for f in f_edm:
             if posto_id is None:
@@ -216,7 +218,8 @@ class RelatorioGeralView(APIView):
             soma += qtd
         for f in f_edm:
             if soma > 0:
-                ret['geral']['edmonton'][f] = ret['geral']['edmonton'][f] * (100/soma)
+                qtd = ret['geral']['edmonton'][f]
+                ret['geral']['edmonton'][f] = ( qtd*(100/soma), qtd )
         
 
         ## POR SEXO
@@ -229,6 +232,8 @@ class RelatorioGeralView(APIView):
 
         for s in sexos:
             s_ = {'M' : 0, 'F' : 1}[s]
+
+            # Subjetiva
             soma = 0
             for f in f_sub:
                 if posto_id is None:
@@ -240,8 +245,10 @@ class RelatorioGeralView(APIView):
                 soma += qtd
             if soma > 0:
                 for f in f_sub:
-                    ret['sexo']['subjetiva'][s][f] = ret['sexo']['subjetiva'][s][f] * (100/soma)
+                    qtd = ret['sexo']['subjetiva'][s][f] 
+                    ret['sexo']['subjetiva'][s][f] = ( qtd*(100/soma), qtd )
 
+            # Edmonton
             soma = 0
             for f in f_edm:
                 if posto_id is None:
@@ -253,7 +260,8 @@ class RelatorioGeralView(APIView):
                 soma += qtd
             if soma > 0:
                 for f in f_edm:
-                    ret['sexo']['edmonton'][s][f] = ret['sexo']['edmonton'][s][f] * (100/soma)
+                    qtd = ret['sexo']['edmonton'][s][f]
+                    ret['sexo']['edmonton'][s][f] = ( qtd*(100/soma), qtd )
 
         ## POR IDADE
         query_idade_sub = "SELECT ppsus_app_paciente.id FROM ppsus_app_paciente INNER JOIN ppsus_app_subjetiva ON ppsus_app_paciente.id = ppsus_app_subjetiva.paciente_id WHERE ppsus_app_subjetiva.fragilidade = {} AND ppsus_app_paciente.data_nascimento BETWEEN {} AND {} AND ppsus_app_subjetiva.data_inicio = (SELECT max(ppsus_app_subjetiva.data_inicio) FROM ppsus_app_subjetiva WHERE ppsus_app_subjetiva.paciente_id = ppsus_app_paciente.id)"
@@ -271,6 +279,7 @@ class RelatorioGeralView(APIView):
                       '70-79' : (sub_years(datetime.now().date(), 79), sub_days(sub_years(datetime.now().date(), 69), 1)),
                       '80+'   : (sub_years(datetime.now().date(), 200), sub_days(sub_years(datetime.now().date(), 79), 1))}[i]
             
+            # Subjetiva
             soma = 0
             for f in f_sub:
                 if posto_id is None:
@@ -281,8 +290,10 @@ class RelatorioGeralView(APIView):
                 soma += qtd
             if soma > 0:
                 for f in f_sub:
-                    ret['idade']['subjetiva'][i][f] = ret['idade']['subjetiva'][i][f] * (100/soma)
+                    qtd = ret['idade']['subjetiva'][i][f]
+                    ret['idade']['subjetiva'][i][f] =  ( qtd*(100/soma), qtd )
 
+            # Edmonton
             soma = 0
             for f in f_edm:
                 if posto_id is None:
@@ -294,6 +305,7 @@ class RelatorioGeralView(APIView):
                 soma += qtd
             if soma > 0:
                 for f in f_edm:
-                    ret['idade']['edmonton'][i][f] = ret['idade']['edmonton'][i][f] * (100/soma)
+                    qtd = ret['idade']['edmonton'][i][f]
+                    ret['idade']['edmonton'][i][f] = ( qtd*(100/soma), qtd )
 
         return Response(ret)
